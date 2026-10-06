@@ -31,6 +31,7 @@ jobs:
           npm pack --pack-destination release
           cp dist/opencode-token-monitor.js release/
           cp dist/bin/* release/
+          cp install.sh install.ps1 verify.sh verify.ps1 uninstall.sh uninstall.ps1 release/
           (cd release && sha256sum * > checksums.txt)
           cat release/checksums.txt
       - name: Create GitHub release

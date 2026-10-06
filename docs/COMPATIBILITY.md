@@ -22,5 +22,10 @@ Status values: **tested** (run and observed, evidence linked), **known incompati
 | Standalone `tokenmon-macos-x64` / `-arm64` | — | cross-compiled only, unsigned | unknown | |
 | Standalone `tokenmon-windows-x64.exe` | — | cross-compiled only, unsigned | unknown | |
 | Profile scripts (bash) | bash 5, GNU coreutils, curl | update, verify, restore on failure | tested | `tests/integration/profile-scripts.test.ts` |
-| Profile scripts (PowerShell) | — | — | unknown | no PowerShell on the build host |
+| Profile scripts (PowerShell) | PowerShell 7.4.6 on Linux | update, verify, restore on failure | tested | `tests/integration/profile-scripts.test.ts` |
+| Profile scripts (PowerShell) | Windows PowerShell 5.1 / Windows | — | unknown | |
+| `install/verify/uninstall.sh` | bash 5, GNU coreutils, Linux x64 | install, upgrade, backup/restore, link refusal, download + checksum, CLI, uninstall | tested | `tests/integration/installers.test.ts` |
+| `install/verify/uninstall.sh` | macOS (bash 3.2, BSD tools) | — | unknown | CI job configured, not yet run |
+| `install/verify/uninstall.ps1` | PowerShell 7.4.6 on Linux | same scenarios as bash, plus record shared with bash | tested | `tests/integration/installers.test.ts` |
+| `install/verify/uninstall.ps1` | Windows PowerShell 5.1 / Windows (junctions) | — | unknown | CI step configured, not yet run |
 | Real providers (Anthropic, OpenAI, …) | — | field mapping, cost, cache | unknown | only the OpenAI-compatible adapter via a mock was observed |

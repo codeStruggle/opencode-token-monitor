@@ -26,8 +26,16 @@ try {
   Write-Host "downloading $BaseUrl/{opencode-token-monitor.js,checksums.txt}"
   $NewBundle = Join-Path $Tmp "opencode-token-monitor.js"
   $Sums = Join-Path $Tmp "checksums.txt"
-  Invoke-WebRequest -UseBasicParsing -Uri "$BaseUrl/opencode-token-monitor.js" -OutFile $NewBundle
-  Invoke-WebRequest -UseBasicParsing -Uri "$BaseUrl/checksums.txt" -OutFile $Sums
+  # Invoke-WebRequest has no file:// support; local mirrors (file:// or a plain path) are copied.
+  foreach ($Pair in @(@("$BaseUrl/opencode-token-monitor.js", $NewBundle), @("$BaseUrl/checksums.txt", $Sums))) {
+    if ($Pair[0] -match '^https?://') { Invoke-WebRequest -UseBasicParsing -Uri $Pair[0] -OutFile $Pair[1] }
+    else {
+      $Local = $Pair[0]
+      if ($Local -match '^file://') { $Local = ([System.Uri]$Local).LocalPath }
+      if (-not (Test-Path -LiteralPath $Local -PathType Leaf)) { throw "cannot read $($Pair[0])" }
+      Copy-Item -LiteralPath $Local -Destination $Pair[1]
+    }
+  }
 
   $Expected = (Get-Content $Sums | Where-Object { ($_ -split '\s+')[1] -eq "opencode-token-monitor.js" } | ForEach-Object { ($_ -split '\s+')[0] } | Select-Object -First 1)
   $Actual = (Get-FileHash -Algorithm SHA256 -Path $NewBundle).Hash.ToLowerInvariant()

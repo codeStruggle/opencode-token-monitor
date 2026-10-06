@@ -16,7 +16,9 @@
 ## Blocked / open
 - Phase 9: no access to `codeStruggle/opencode-portable-profile`; kit ready in `integrations/portable-profile/`.
 - License: MIT (decided by the owner). No release tag, no npm publish yet.
-- Not executed: PowerShell scripts, macOS/Windows/arm64 binaries, real providers, real profile commands.
+- Install scripts (`install|verify|uninstall.{sh,ps1}`) tested with bash and PowerShell 7.4.6 on Linux;
+  Windows PowerShell 5.1 / junctions and macOS bash 3.2 not executed yet (CI configured).
+- Not executed: macOS/Windows/arm64 binaries, real providers, real profile commands.
 
 ## Next steps
 1. Owner decides npm publishing; tag `v0.1.0` to run `.github/workflows/release.yml`.

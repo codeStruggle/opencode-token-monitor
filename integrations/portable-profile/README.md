@@ -4,9 +4,14 @@ Files in this directory are **for the `codeStruggle/opencode-portable-profile` r
 kept here because Token Monitor's repository is the only place its release format is defined; the
 profile copies them once and then only consumes pinned release bundles.
 
-They have not yet been applied to the actual profile repository (no access from the session that
-wrote them), so the profile's own `verify.sh` / installer conventions still need to be checked when
-copying.
+They have not yet been applied to the profile repository. They were written against its
+`install/verify/uninstall` scripts (read 2026-10-06): the installer links `profile/plugins` into the global
+config, so a bundle at `profile/plugins/opencode-token-monitor.js` is loaded with no installer change.
+The bash scripts and the PowerShell scripts (PowerShell 7.4.6 on Linux) are tested; Windows PowerShell 5.1
+is not yet.
+
+Token Monitor's own `install.sh` / `install.ps1` detect the profile's linked `plugins/` directory and
+refuse to write into it, so the two installation paths do not interfere.
 
 ## What goes where in the profile
 

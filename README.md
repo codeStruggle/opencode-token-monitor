@@ -20,7 +20,29 @@ and [known limitations](#limitations).
 
 Pick **one** of the following. Loading the plugin twice is detected and ignored, but avoid it.
 
-**Local bundle (recommended):** copy the release file `opencode-token-monitor.js` into OpenCode's
+**Install scripts (recommended).** Run them from an unpacked release or from a checkout after
+`bun run build`; `--version` downloads a pinned release and verifies its checksum.
+
+| | Linux / macOS | Windows PowerShell |
+| --- | --- | --- |
+| Install | `bash install.sh [--version 0.1.0] [--with-cli]` | `.\install.ps1 [-Version 0.1.0] [-WithCli]` |
+| Verify | `bash verify.sh` | `.\verify.ps1` |
+| Uninstall | `bash uninstall.sh` | `.\uninstall.ps1` |
+
+(On Windows, `Set-ExecutionPolicy -Scope Process Bypass` first if scripts are blocked.)
+
+- The bundle is copied to `${XDG_CONFIG_HOME:-~/.config}/opencode/plugins/` (Windows:
+  `$env:XDG_CONFIG_HOME\opencode\plugins` or `$HOME\.config\opencode\plugins`). An install record
+  `.opencode-token-monitor-install` next to it is shared by both script families.
+- An existing file that the scripts did not install is never replaced without `--force` / `-Force`; it is
+  backed up and restored by uninstall. Files modified after installation are preserved by uninstall.
+- If `plugins/` is a link or junction (the portable profile manages it), install refuses and points to the
+  profile's `scripts/update-token-monitor.*`; `--into-link` / `-IntoLink` overrides this.
+- `--with-cli` / `-WithCli` copies `tokenmon` to `~/.local/bin` (override with `--cli-dir` or
+  `$TOKENMON_BIN_DIR`); PATH is not modified.
+- `opencode.json` / `opencode.jsonc` are never modified. Uninstall never deletes the usage database.
+
+**Local bundle by hand:** copy the release file `opencode-token-monitor.js` into OpenCode's
 global plugins directory:
 
 ```bash

@@ -15,6 +15,8 @@ First implementation of plan A.
   `--csv`, `--redact-paths`, `--tz`.
 - Database schema version 1.
 - Build of plugin bundle, npm CLI (Node ≥ 22.13) and standalone binaries; release workflow.
+- `install` / `verify` / `uninstall` scripts for Linux/macOS (bash) and Windows (PowerShell), modelled on
+  the portable profile's installers, with a shared install record, backups and checksum-verified downloads.
 - Portable-profile integration kit (update/verify scripts, manifest example).
 - Licensed under MIT.
 - Verified against OpenCode 1.18.34 on Linux x64 (see `docs/COMPATIBILITY.md`).

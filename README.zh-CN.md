@@ -14,9 +14,25 @@
 
 ## 安装插件
 
-以下方式**二选一**。重复加载会被检测并忽略，但请尽量避免。
+以下方式**任选其一**。重复加载会被检测并忽略，但请尽量避免。
 
-**本地 bundle（推荐）：** 把发布文件 `opencode-token-monitor.js` 复制到 OpenCode 的全局插件目录：
+**安装脚本（推荐）。** 在解压后的发布目录中运行，或在仓库里执行 `bun run build` 之后运行；`--version` 会下载指定版本的发布文件并校验 checksum。
+
+| | Linux / macOS | Windows PowerShell |
+| --- | --- | --- |
+| 安装 | `bash install.sh [--version 0.1.0] [--with-cli]` | `.\install.ps1 [-Version 0.1.0] [-WithCli]` |
+| 验证 | `bash verify.sh` | `.\verify.ps1` |
+| 卸载 | `bash uninstall.sh` | `.\uninstall.ps1` |
+
+（Windows 上如果脚本被阻止，先执行 `Set-ExecutionPolicy -Scope Process Bypass`。）
+
+- bundle 会复制到 `${XDG_CONFIG_HOME:-~/.config}/opencode/plugins/`（Windows：`$env:XDG_CONFIG_HOME\opencode\plugins` 或 `$HOME\.config\opencode\plugins`）。旁边的安装记录 `.opencode-token-monitor-install` 由两套脚本共用。
+- 不是由脚本安装的同名文件，不加 `--force` / `-Force` 绝不替换；替换前会备份，卸载时恢复。安装后被修改过的文件，卸载时会保留。
+- 如果 `plugins/` 是链接或 junction（由 portable profile 管理），安装会拒绝，并提示改用 profile 的 `scripts/update-token-monitor.*`；可用 `--into-link` / `-IntoLink` 强制写入。
+- `--with-cli` / `-WithCli` 会把 `tokenmon` 复制到 `~/.local/bin`（可用 `--cli-dir` 或 `$TOKENMON_BIN_DIR` 修改），不会修改 PATH。
+- 不会修改 `opencode.json` / `opencode.jsonc`；卸载不会删除用量数据库。
+
+**手动复制本地 bundle：** 把发布文件 `opencode-token-monitor.js` 复制到 OpenCode 的全局插件目录：
 
 ```bash
 mkdir -p "${XDG_CONFIG_HOME:-$HOME/.config}/opencode/plugins"

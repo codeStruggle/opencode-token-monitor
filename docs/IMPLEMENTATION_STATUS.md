@@ -25,7 +25,7 @@ verification missing; **blocked** = cannot proceed from this environment; **open
 | 6 History/compare/Git | done | analytics tests (trend empty buckets, compare caveats, fingerprint grouping); plugin tests (git clean/dirty/non-git, fingerprint stability/salt/partial) | |
 | 7 Full CLI | done | `tests/integration/cli.test.ts` (JSON contract, CSV, every command, redaction, exit codes, data maintenance, install-plugin link semantics); `tests/node/cli.test.mjs` | |
 | 8a Minimal release | partial | `scripts/build.ts`; `.github/workflows/release.yml`; npm pack verified; npm-style plugin load verified from a packed tarball | no release tag pushed, npm not published |
-| 9 Profile integration | blocked | integration kit in `integrations/portable-profile/` with bash scripts tested (`tests/integration/profile-scripts.test.ts`) | profile repository not accessible from this session; PowerShell scripts not executed |
+| 9 Profile integration | blocked (write) | integration kit in `integrations/portable-profile/`, checked against the profile's installers (read-only clone, 2026-10-06); bash and PowerShell 7.4.6 tested (`tests/integration/profile-scripts.test.ts`); own `install/verify/uninstall.{sh,ps1}` refuse to write into the profile's linked `plugins/` | no push access to the profile repository; Windows PowerShell 5.1 not executed |
 | 8b Full release | partial | all five binaries cross-compile (sizes: linux 81 MB, macOS 62–69 MB, Windows 86 MB); linux-x64 runs without Bun | arm64/macOS/Windows binaries not executed; unsigned |
 | 10 Final E2E | partial | `tests/e2e/run-e2e.ts` against OpenCode 1.18.34: 20/20 checks (install, collection, duplicate load, abort, reconciliation, commands, traces, context, restart) | real providers, real profile commands, multiple models, Windows/macOS |
 
@@ -34,11 +34,13 @@ verification missing; **blocked** = cannot proceed from this environment; **open
 | Check | Command | Result |
 | --- | --- | --- |
 | Typecheck | `bun run typecheck` | pass |
-| Unit + integration | `bun run test` | 106 pass, 0 fail (12 files) |
+| Unit + integration | `PWSH=pwsh bun run test` | 130 pass, 0 fail (13 files); also 3 consecutive runs under full CPU load |
 | Node CLI (`node:sqlite`) | `node --test tests/node/cli.test.mjs` | pass |
 | Real OpenCode E2E | `OPENCODE_BIN=… bun tests/e2e/run-e2e.ts` | 20/20 checks |
 | npm-form plugin | config `plugin: ["opencode-token-monitor@file:…tgz"]` | loaded from `~/.cache/opencode/packages/…`, 1 step recorded |
 | Standalone binary | `env -i PATH=/usr/bin:/bin dist/bin/tokenmon-linux-x64 …` | version, summary, doctor OK; embedded bundle SHA-256 = release bundle |
+| Installer scripts | `PWSH=pwsh bun test tests/integration/installers.test.ts` | 21 pass (bash 10, PowerShell 7.4.6 on Linux 10, shared record 1) |
+| Profile kit PowerShell | `PWSH=pwsh bun test tests/integration/profile-scripts.test.ts` | 8 pass (bash 5, PowerShell 3) |
 | Overhead | `bun scripts/bench.ts 300` | ~3.1 µs per hook, ~3.2 ms per flush (~108 events), ~4 KB per step |
 
 ## Known limitations

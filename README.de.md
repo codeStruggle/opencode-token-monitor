@@ -21,9 +21,32 @@ und [Einschränkungen](#einschränkungen).
 
 ## Plugin installieren
 
-Wählen Sie **eine** der beiden Varianten. Doppeltes Laden wird erkannt und ignoriert, sollte aber vermieden werden.
+Wählen Sie **eine** der folgenden Varianten. Doppeltes Laden wird erkannt und ignoriert, sollte aber vermieden werden.
 
-**Lokales Bundle (empfohlen):** die Release-Datei `opencode-token-monitor.js` in OpenCodes globales
+**Installationsskripte (empfohlen).** Aus einem entpackten Release oder nach `bun run build` aus dem
+Repository ausführen; `--version` lädt ein festgelegtes Release herunter und prüft die Prüfsumme.
+
+| | Linux / macOS | Windows PowerShell |
+| --- | --- | --- |
+| Installieren | `bash install.sh [--version 0.1.0] [--with-cli]` | `.\install.ps1 [-Version 0.1.0] [-WithCli]` |
+| Prüfen | `bash verify.sh` | `.\verify.ps1` |
+| Deinstallieren | `bash uninstall.sh` | `.\uninstall.ps1` |
+
+(Unter Windows ggf. zuerst `Set-ExecutionPolicy -Scope Process Bypass`.)
+
+- Das Bundle wird nach `${XDG_CONFIG_HOME:-~/.config}/opencode/plugins/` kopiert (Windows:
+  `$env:XDG_CONFIG_HOME\opencode\plugins` bzw. `$HOME\.config\opencode\plugins`). Der Installationsvermerk
+  `.opencode-token-monitor-install` daneben wird von beiden Skriptfamilien gemeinsam genutzt.
+- Eine vorhandene, nicht von den Skripten installierte Datei wird nur mit `--force` / `-Force` ersetzt; sie
+  wird gesichert und bei der Deinstallation wiederhergestellt. Nach der Installation geänderte Dateien bleiben
+  bei der Deinstallation erhalten.
+- Ist `plugins/` ein Link oder Junction (vom Portable Profile verwaltet), verweigert die Installation und
+  verweist auf `scripts/update-token-monitor.*` des Profils; `--into-link` / `-IntoLink` erzwingt es.
+- `--with-cli` / `-WithCli` kopiert `tokenmon` nach `~/.local/bin` (änderbar mit `--cli-dir` oder
+  `$TOKENMON_BIN_DIR`); PATH wird nicht verändert.
+- `opencode.json` / `opencode.jsonc` werden nie verändert. Die Deinstallation löscht die Verbrauchsdatenbank nie.
+
+**Lokales Bundle von Hand:** die Release-Datei `opencode-token-monitor.js` in OpenCodes globales
 Plugin-Verzeichnis kopieren:
 
 ```bash
