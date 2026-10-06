@@ -9,6 +9,7 @@ import { createHash } from "node:crypto"
 import { chmodSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from "node:fs"
 import { join } from "node:path"
 import pkg from "../package.json" with { type: "json" }
+import { SUPPORTED_SCHEMA_VERSION } from "../src/db/migrations.ts"
 
 const root = join(import.meta.dir, "..")
 const dist = join(root, "dist")
@@ -26,6 +27,7 @@ const BINARY_TARGETS: Record<string, string> = {
 const banner = `// GENERATED FILE
 // Source: codeStruggle/opencode-token-monitor
 // Version: ${pkg.version}
+// DB schema: ${SUPPORTED_SCHEMA_VERSION}
 // DO NOT EDIT
 `
 
