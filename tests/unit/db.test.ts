@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test"
 import { join } from "node:path"
-import { openDatabase } from "../../src/db/driver.ts"
+import { enableWal, openDatabase } from "../../src/db/driver.ts"
 import { prune, purgeFiles, vacuum } from "../../src/db/maintenance.ts"
 import { migrate, readSchemaVersion, SchemaTooNewError, SUPPORTED_SCHEMA_VERSION } from "../../src/db/migrations.ts"
 import { WriteQueue } from "../../src/plugin/queue.ts"
@@ -161,3 +161,46 @@ describe("maintenance", () => {
   })
 })
 
+
+describe("WAL switch under contention", () => {
+  type Raw = Parameters<typeof enableWal>[0]
+  const fakeRaw = (busyTimes: number, error = "SQLiteError: database is locked") => {
+    let attempts = 0
+    let mode = "delete"
+    const raw = {
+      exec(sql: string) {
+        if (sql.includes("journal_mode = WAL")) {
+          if (attempts++ < busyTimes) throw Object.assign(new Error(error), { code: error.includes("locked") ? "SQLITE_BUSY" : "SQLITE_IOERR" })
+          mode = "wal"
+        }
+      },
+      prepare: () => ({ get: () => ({ journal_mode: mode }), run: () => ({ changes: 0 }), all: () => [] }),
+    } as unknown as Raw
+    return { raw, attempts: () => attempts, mode: () => mode }
+  }
+
+  test("retries SQLITE_BUSY until the switch succeeds", async () => {
+    const f = fakeRaw(3)
+    await enableWal(f.raw, 2000)
+    expect(f.attempts()).toBe(4)
+    expect(f.mode()).toBe("wal")
+  })
+
+  test("an already-WAL database is not switched again", async () => {
+    const f = fakeRaw(0)
+    await enableWal(f.raw, 2000)
+    await enableWal(f.raw, 2000)
+    expect(f.attempts()).toBe(1)
+  })
+
+  test("gives up after the timeout and rethrows", async () => {
+    const f = fakeRaw(Number.POSITIVE_INFINITY)
+    await expect(enableWal(f.raw, 50)).rejects.toThrow("database is locked")
+  })
+
+  test("other errors are not retried", async () => {
+    const f = fakeRaw(5, "SQLiteError: disk I/O error")
+    await expect(enableWal(f.raw, 2000)).rejects.toThrow("disk I/O error")
+    expect(f.attempts()).toBe(1)
+  })
+})

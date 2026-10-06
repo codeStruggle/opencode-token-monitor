@@ -56,7 +56,9 @@ Schema (version 1, `src/db/migrations.ts`):
 Times are UTC epoch milliseconds. Missing counters are `NULL`, never 0.
 
 Migrations: `PRAGMA user_version`; each migration runs inside `BEGIN IMMEDIATE`, re-checking the version
-after taking the write lock, so concurrent start-ups migrate once. A database whose version is newer
+after taking the write lock, so concurrent start-ups migrate once. Switching a fresh database to WAL
+needs an exclusive lock that SQLite does not wait for, so the switch is retried with back-off within the
+busy timeout (several OpenCode instances may create the database at the same moment). A database whose version is newer
 than the build supports is never written; read commands refuse to interpret it.
 
 Storage cost: ~4 KB per LLM step including messages, tool rows and context estimates (bench).

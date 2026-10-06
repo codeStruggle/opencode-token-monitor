@@ -68,20 +68,12 @@ if (withBinaries) {
   for (const [name, target] of Object.entries(BINARY_TARGETS)) {
     if (only && !only.includes(name)) continue
     const out = join(dist, "bin", name)
-    const proc = Bun.spawnSync(
-      [
-        process.execPath,
-        "build",
-        "--compile",
-        `--target=${target}`,
-        "--define",
-        `__EMBEDDED_PLUGIN__=${JSON.stringify(plugin)}`,
-        join(root, "src/cli/tokenmon.ts"),
-        "--outfile",
-        out,
-      ],
-      { stdout: "inherit", stderr: "inherit" },
-    )
+    // Compile the already bundled CLI: it carries the embedded plugin, so nothing large goes through
+    // the command line (Windows limits it to 32 KiB; passing the bundle via --define failed there).
+    const proc = Bun.spawnSync([process.execPath, "build", "--compile", `--target=${target}`, cliPath, "--outfile", out], {
+      stdout: "inherit",
+      stderr: "inherit",
+    })
     if (proc.exitCode !== 0) throw new Error(`binary build failed: ${name}`)
   }
 }

@@ -40,3 +40,24 @@ test("several processes migrate and write one database while a reader queries", 
   expect(Number(db.prepare(`SELECT COUNT(*) AS n FROM llm_steps WHERE id = 'shared'`).get()!.n)).toBe(1)
   db.close()
 }, 30_000)
+
+test("processes opening a fresh database at the same moment all succeed (WAL switch under contention)", async () => {
+  const failures: string[] = []
+  // The race needs a few rounds to show up reliably (about 1 in 20 openers hit it before the fix).
+  for (let round = 0; round < 20; round++) {
+    const path = join(tempDir(), "fresh.sqlite")
+    const procs = Array.from({ length: 8 }, (_, w) =>
+      Bun.spawn([process.execPath, join(import.meta.dir, "concurrency-worker.ts"), path, String(w), "5"], { stdout: "pipe", stderr: "pipe" }),
+    )
+    for (const p of procs) {
+      const code = await p.exited
+      const err = await new Response(p.stderr).text()
+      if (code !== 0 || err) failures.push(err.split("\n").find((l) => l.includes("Error")) ?? `exit ${code}`)
+    }
+    const db = await openDatabase(path, { queryOnly: true })
+    expect(Number(db.prepare(`SELECT COUNT(*) AS n FROM llm_steps`).get()!.n)).toBe(8 * 5 + 1)
+    expect(String(db.prepare(`PRAGMA journal_mode`).get()!.journal_mode)).toBe("wal")
+    db.close()
+  }
+  expect(failures).toEqual([])
+}, 60_000)

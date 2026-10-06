@@ -96,6 +96,30 @@ async function withoutSqliteWarning<T>(fn: () => Promise<T>): Promise<T> {
   }
 }
 
+const isBusy = (error: unknown) => /SQLITE_BUSY|database is locked/i.test(String((error as { code?: string })?.code ?? "") + String(error))
+
+/**
+ * WAL is persistent, so only the first opener switches it. Changing the journal mode needs an
+ * exclusive lock and does not wait on busy_timeout: when several processes open a fresh database
+ * at once (e.g. OpenCode instances starting together) the switch is retried within the timeout.
+ */
+export async function enableWal(raw: Pick<RawDb, "exec" | "prepare">, timeoutMs: number): Promise<void> {
+  const deadline = Date.now() + timeoutMs
+  let delay = 5
+  while (true) {
+    try {
+      const mode = raw.prepare("PRAGMA journal_mode").get() as { journal_mode?: string } | undefined
+      if (String(mode?.journal_mode ?? "").toLowerCase() === "wal") return
+      raw.exec("PRAGMA journal_mode = WAL")
+      return
+    } catch (error) {
+      if (!isBusy(error) || Date.now() >= deadline) throw error
+      await new Promise((resolve) => setTimeout(resolve, delay))
+      delay = Math.min(delay * 2, 100)
+    }
+  }
+}
+
 export async function openDatabase(path: string, options: OpenOptions = {}): Promise<Db> {
   if (path !== ":memory:") {
     if (!existsSync(path)) {
@@ -104,8 +128,9 @@ export async function openDatabase(path: string, options: OpenOptions = {}): Pro
     }
   }
   const { raw, driver } = await openRaw(path, options.readonly ?? false)
-  raw.exec(`PRAGMA busy_timeout = ${options.busyTimeoutMs ?? 5000}`)
-  if (path !== ":memory:" && !options.queryOnly && !options.readonly) raw.exec("PRAGMA journal_mode = WAL")
+  const busyTimeoutMs = options.busyTimeoutMs ?? 5000
+  raw.exec(`PRAGMA busy_timeout = ${busyTimeoutMs}`)
+  if (path !== ":memory:" && !options.queryOnly && !options.readonly) await enableWal(raw, busyTimeoutMs)
   raw.exec("PRAGMA foreign_keys = OFF")
   if (options.queryOnly || options.readonly) raw.exec("PRAGMA query_only = ON")
 
