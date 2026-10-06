@@ -17,8 +17,9 @@
 - Phase 9: no access to `codeStruggle/opencode-portable-profile`; kit ready in `integrations/portable-profile/`.
 - License: MIT (decided by the owner). No release tag, no npm publish yet.
 - Install scripts (`install|verify|uninstall.{sh,ps1}`) tested with bash and PowerShell 7.4.6 on Linux;
-  Windows PowerShell 5.1 / junctions and macOS bash 3.2 not executed yet (CI configured).
-- Not executed: macOS/Windows/arm64 binaries, real providers, real profile commands.
+  CI (PR #1) also ran them on macOS arm64 and the PowerShell 5.1 install cycle on Windows; junction-linked
+  plugins/ on Windows not exercised.
+- Not executed: linux-arm64 and macos-x64 binaries; the plugin with real OpenCode on macOS/Windows, real providers, real profile commands.
 
 ## Next steps
 1. Owner decides npm publishing; tag `v0.1.0` to run `.github/workflows/release.yml`.
