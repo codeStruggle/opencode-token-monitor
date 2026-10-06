@@ -1,0 +1,556 @@
+{
+ "source": "OpenCode 1.18.34 opencode.db (mock provider run)",
+ "schema": {
+  "project": "CREATE TABLE `project` (\n          `id` text PRIMARY KEY,\n          `worktree` text NOT NULL,\n          `vcs` text,\n          `name` text,\n          `icon_url` text,\n          `icon_url_override` text,\n          `icon_color` text,\n          `time_created` integer NOT NULL,\n          `time_updated` integer NOT NULL,\n          `time_initialized` integer,\n          `sandboxes` text NOT NULL,\n          `commands` text\n        )",
+  "session": "CREATE TABLE `session` (\n          `id` text PRIMARY KEY,\n          `project_id` text NOT NULL,\n          `workspace_id` text,\n          `parent_id` text,\n          `slug` text NOT NULL,\n          `directory` text NOT NULL,\n          `path` text,\n          `title` text NOT NULL,\n          `version` text NOT NULL,\n          `share_url` text,\n          `summary_additions` integer,\n          `summary_deletions` integer,\n          `summary_files` integer,\n          `summary_diffs` text,\n          `metadata` text,\n          `cost` real DEFAULT 0 NOT NULL,\n          `tokens_input` integer DEFAULT 0 NOT NULL,\n          `tokens_output` integer DEFAULT 0 NOT NULL,\n          `tokens_reasoning` integer DEFAULT 0 NOT NULL,\n          `tokens_cache_read` integer DEFAULT 0 NOT NULL,\n          `tokens_cache_write` integer DEFAULT 0 NOT NULL,\n          `revert` text,\n          `permission` text,\n          `agent` text,\n          `model` text,\n          `time_created` integer NOT NULL,\n          `time_updated` integer NOT NULL,\n          `time_compacting` integer,\n          `time_archived` integer,\n          CONSTRAINT `fk_session_project_id_project_id_fk` FOREIGN KEY (`project_id`) REFERENCES `project`(`id`) ON DELETE CASCADE\n        )",
+  "message": "CREATE TABLE `message` (\n          `id` text PRIMARY KEY,\n          `session_id` text NOT NULL,\n          `time_created` integer NOT NULL,\n          `time_updated` integer NOT NULL,\n          `data` text NOT NULL,\n          CONSTRAINT `fk_message_session_id_session_id_fk` FOREIGN KEY (`session_id`) REFERENCES `session`(`id`) ON DELETE CASCADE\n        )",
+  "part": "CREATE TABLE `part` (\n          `id` text PRIMARY KEY,\n          `message_id` text NOT NULL,\n          `session_id` text NOT NULL,\n          `time_created` integer NOT NULL,\n          `time_updated` integer NOT NULL,\n          `data` text NOT NULL,\n          CONSTRAINT `fk_part_message_id_message_id_fk` FOREIGN KEY (`message_id`) REFERENCES `message`(`id`) ON DELETE CASCADE\n        )"
+ },
+ "rows": {
+  "project": [
+   {
+    "id": "global",
+    "worktree": "/work/proj",
+    "vcs": "git",
+    "name": null,
+    "icon_url": null,
+    "icon_url_override": null,
+    "icon_color": null,
+    "time_created": 1791283662110,
+    "time_updated": 1791283680710,
+    "time_initialized": null,
+    "sandboxes": "[]",
+    "commands": null
+   }
+  ],
+  "session": [
+   {
+    "id": "ses_eef2c5810ffeDlifxbZjhzyRoM",
+    "project_id": "global",
+    "workspace_id": null,
+    "parent_id": null,
+    "slug": "sunny-garden",
+    "directory": "/work/proj",
+    "path": "",
+    "title": "Mock title",
+    "version": "1.18.34",
+    "share_url": null,
+    "summary_additions": 0,
+    "summary_deletions": 0,
+    "summary_files": 0,
+    "summary_diffs": null,
+    "metadata": null,
+    "cost": 0.003267,
+    "tokens_input": 819,
+    "tokens_output": 40,
+    "tokens_reasoning": 10,
+    "tokens_cache_read": 200,
+    "tokens_cache_write": 0,
+    "revert": null,
+    "permission": "[{\"permission\":\"question\",\"pattern\":\"*\",\"action\":\"deny\"},{\"permission\":\"plan_enter\",\"pattern\":\"*\",\"action\":\"deny\"},{\"permission\":\"plan_exit\",\"pattern\":\"*\",\"action\":\"deny\"}]",
+    "agent": "build",
+    "model": "{\"id\":\"mock-model\",\"providerID\":\"mock\",\"variant\":\"default\"}",
+    "time_created": 1791283668975,
+    "time_updated": 1791283671794,
+    "time_compacting": null,
+    "time_archived": null
+   },
+   {
+    "id": "ses_eef2c4681ffeSXu6sP334VyguH",
+    "project_id": "global",
+    "workspace_id": null,
+    "parent_id": null,
+    "slug": "clever-garden",
+    "directory": "/work/proj",
+    "path": "",
+    "title": "Mock title",
+    "version": "1.18.34",
+    "share_url": null,
+    "summary_additions": 0,
+    "summary_deletions": 0,
+    "summary_files": 0,
+    "summary_diffs": null,
+    "metadata": null,
+    "cost": 0.006552,
+    "tokens_input": 1644,
+    "tokens_output": 80,
+    "tokens_reasoning": 20,
+    "tokens_cache_read": 400,
+    "tokens_cache_write": 0,
+    "revert": null,
+    "permission": "[{\"permission\":\"question\",\"pattern\":\"*\",\"action\":\"deny\"},{\"permission\":\"plan_enter\",\"pattern\":\"*\",\"action\":\"deny\"},{\"permission\":\"plan_exit\",\"pattern\":\"*\",\"action\":\"deny\"}]",
+    "agent": "build",
+    "model": "{\"id\":\"mock-model\",\"providerID\":\"mock\",\"variant\":\"default\"}",
+    "time_created": 1791283673470,
+    "time_updated": 1791283675731,
+    "time_compacting": null,
+    "time_archived": null
+   },
+   {
+    "id": "ses_eef2c3f76ffeoBq0073mUpgYde",
+    "project_id": "global",
+    "workspace_id": null,
+    "parent_id": "ses_eef2c4681ffeSXu6sP334VyguH",
+    "slug": "kind-wizard",
+    "directory": "/work/proj",
+    "path": "",
+    "title": "sub work (@general subagent)",
+    "version": "1.18.34",
+    "share_url": null,
+    "summary_additions": 0,
+    "summary_deletions": 0,
+    "summary_files": 0,
+    "summary_diffs": null,
+    "metadata": null,
+    "cost": 0.003276,
+    "tokens_input": 822,
+    "tokens_output": 40,
+    "tokens_reasoning": 10,
+    "tokens_cache_read": 200,
+    "tokens_cache_write": 0,
+    "revert": null,
+    "permission": "[{\"permission\":\"question\",\"pattern\":\"*\",\"action\":\"deny\"},{\"permission\":\"plan_enter\",\"pattern\":\"*\",\"action\":\"deny\"},{\"permission\":\"plan_exit\",\"pattern\":\"*\",\"action\":\"deny\"},{\"permission\":\"task\",\"pattern\":\"*\",\"action\":\"deny\"}]",
+    "agent": "general",
+    "model": "{\"id\":\"mock-model\",\"providerID\":\"mock\",\"variant\":\"default\"}",
+    "time_created": 1791283675273,
+    "time_updated": 1791283675479,
+    "time_compacting": null,
+    "time_archived": null
+   },
+   {
+    "id": "ses_eef2c371dffesMpHdkR6YuQ3PJ",
+    "project_id": "global",
+    "workspace_id": null,
+    "parent_id": null,
+    "slug": "glowing-garden",
+    "directory": "/work/proj",
+    "path": "",
+    "title": "Mock title",
+    "version": "1.18.34",
+    "share_url": null,
+    "summary_additions": 0,
+    "summary_deletions": 0,
+    "summary_files": 0,
+    "summary_diffs": null,
+    "metadata": null,
+    "cost": 0.003288,
+    "tokens_input": 826,
+    "tokens_output": 40,
+    "tokens_reasoning": 10,
+    "tokens_cache_read": 200,
+    "tokens_cache_write": 0,
+    "revert": null,
+    "permission": "[{\"permission\":\"question\",\"pattern\":\"*\",\"action\":\"deny\"},{\"permission\":\"plan_enter\",\"pattern\":\"*\",\"action\":\"deny\"},{\"permission\":\"plan_exit\",\"pattern\":\"*\",\"action\":\"deny\"}]",
+    "agent": "build",
+    "model": "{\"id\":\"mock-model\",\"providerID\":\"mock\",\"variant\":\"default\"}",
+    "time_created": 1791283677410,
+    "time_updated": 1791283679517,
+    "time_compacting": null,
+    "time_archived": null
+   },
+   {
+    "id": "ses_eef2c3380ffexKCjymGO2kzLET",
+    "project_id": "global",
+    "workspace_id": null,
+    "parent_id": "ses_eef2c371dffesMpHdkR6YuQ3PJ",
+    "slug": "stellar-sailor",
+    "directory": "/work/proj",
+    "path": "",
+    "title": "Run in a child session (@general subagent)",
+    "version": "1.18.34",
+    "share_url": null,
+    "summary_additions": 0,
+    "summary_deletions": 0,
+    "summary_files": 0,
+    "summary_diffs": null,
+    "metadata": null,
+    "cost": 0.003285,
+    "tokens_input": 825,
+    "tokens_output": 40,
+    "tokens_reasoning": 10,
+    "tokens_cache_read": 200,
+    "tokens_cache_write": 0,
+    "revert": null,
+    "permission": "[{\"permission\":\"question\",\"pattern\":\"*\",\"action\":\"deny\"},{\"permission\":\"plan_enter\",\"pattern\":\"*\",\"action\":\"deny\"},{\"permission\":\"plan_exit\",\"pattern\":\"*\",\"action\":\"deny\"},{\"permission\":\"task\",\"pattern\":\"*\",\"action\":\"deny\"}]",
+    "agent": "general",
+    "model": "{\"id\":\"mock-model\",\"providerID\":\"mock\",\"variant\":\"default\"}",
+    "time_created": 1791283678335,
+    "time_updated": 1791283679349,
+    "time_compacting": null,
+    "time_archived": null
+   },
+   {
+    "id": "ses_eef2c286bffeHNGmz4fOlOrCrp",
+    "project_id": "global",
+    "workspace_id": null,
+    "parent_id": null,
+    "slug": "kind-lagoon",
+    "directory": "/work/proj",
+    "path": "",
+    "title": "Mock title",
+    "version": "1.18.34",
+    "share_url": null,
+    "summary_additions": 0,
+    "summary_deletions": 0,
+    "summary_files": 0,
+    "summary_diffs": null,
+    "metadata": null,
+    "cost": 0.003294,
+    "tokens_input": 828,
+    "tokens_output": 40,
+    "tokens_reasoning": 10,
+    "tokens_cache_read": 200,
+    "tokens_cache_write": 0,
+    "revert": null,
+    "permission": "[{\"permission\":\"question\",\"pattern\":\"*\",\"action\":\"deny\"},{\"permission\":\"plan_enter\",\"pattern\":\"*\",\"action\":\"deny\"},{\"permission\":\"plan_exit\",\"pattern\":\"*\",\"action\":\"deny\"}]",
+    "agent": "build",
+    "model": "{\"id\":\"mock-model\",\"providerID\":\"mock\",\"variant\":\"default\"}",
+    "time_created": 1791283681172,
+    "time_updated": 1791283683007,
+    "time_compacting": null,
+    "time_archived": null
+   }
+  ],
+  "message": [
+   {
+    "id": "msg_110d3a866001XWO2dQRsDEuEtX",
+    "session_id": "ses_eef2c5810ffeDlifxbZjhzyRoM",
+    "time_created": 1791283669094,
+    "time_updated": 1791283670857,
+    "data": "{\"role\":\"user\",\"time\":{\"created\":1791283669094},\"agent\":\"build\",\"model\":{\"providerID\":\"mock\",\"modelID\":\"mock-model\"},\"summary\":{\"diffs\":[]}}"
+   },
+   {
+    "id": "msg_110d3ae52001ph600ssQix7Tqv",
+    "session_id": "ses_eef2c5810ffeDlifxbZjhzyRoM",
+    "time_created": 1791283670610,
+    "time_updated": 1791283671784,
+    "data": "{\"parentID\":\"msg_110d3a866001XWO2dQRsDEuEtX\",\"role\":\"assistant\",\"mode\":\"build\",\"agent\":\"build\",\"path\":{\"cwd\":\"/work/proj\",\"root\":\"/work/proj\"},\"cost\":0.003267,\"tokens\":{\"total\":1069,\"input\":819,\"output\":40,\"reasoning\":10,\"cache\":{\"write\":0,\"read\":200}},\"modelID\":\"mock-model\",\"providerID\":\"mock\",\"time\":{\"created\":1791283670610,\"completed\":1791283671783},\"finish\":\"stop\"}"
+   },
+   {
+    "id": "msg_110d3ba140011eCc2E9Y3DAXHe",
+    "session_id": "ses_eef2c4681ffeSXu6sP334VyguH",
+    "time_created": 1791283673621,
+    "time_updated": 1791283675658,
+    "data": "{\"role\":\"user\",\"time\":{\"created\":1791283673621},\"agent\":\"build\",\"model\":{\"providerID\":\"mock\",\"modelID\":\"mock-model\"},\"summary\":{\"diffs\":[]}}"
+   },
+   {
+    "id": "msg_110d3bd1f001yAwWXeaCckDy7P",
+    "session_id": "ses_eef2c4681ffeSXu6sP334VyguH",
+    "time_created": 1791283674399,
+    "time_updated": 1791283675545,
+    "data": "{\"parentID\":\"msg_110d3ba140011eCc2E9Y3DAXHe\",\"role\":\"assistant\",\"mode\":\"build\",\"agent\":\"build\",\"path\":{\"cwd\":\"/work/proj\",\"root\":\"/work/proj\"},\"cost\":0.003273,\"tokens\":{\"total\":1071,\"input\":821,\"output\":40,\"reasoning\":10,\"cache\":{\"write\":0,\"read\":200}},\"modelID\":\"mock-model\",\"providerID\":\"mock\",\"time\":{\"created\":1791283674399,\"completed\":1791283675544},\"finish\":\"tool-calls\"}"
+   },
+   {
+    "id": "msg_110d3c094001WdieEGmDUlcFeB",
+    "session_id": "ses_eef2c3f76ffeoBq0073mUpgYde",
+    "time_created": 1791283675285,
+    "time_updated": 1791283675603,
+    "data": "{\"role\":\"user\",\"time\":{\"created\":1791283675285},\"agent\":\"general\",\"model\":{\"providerID\":\"mock\",\"modelID\":\"mock-model\"},\"summary\":{\"diffs\":[]}}"
+   },
+   {
+    "id": "msg_110d3c0af001oX7D1Eip6tfhIo",
+    "session_id": "ses_eef2c3f76ffeoBq0073mUpgYde",
+    "time_created": 1791283675311,
+    "time_updated": 1791283675464,
+    "data": "{\"parentID\":\"msg_110d3c094001WdieEGmDUlcFeB\",\"role\":\"assistant\",\"mode\":\"general\",\"agent\":\"general\",\"path\":{\"cwd\":\"/work/proj\",\"root\":\"/work/proj\"},\"cost\":0.003276,\"tokens\":{\"total\":1072,\"input\":822,\"output\":40,\"reasoning\":10,\"cache\":{\"write\":0,\"read\":200}},\"modelID\":\"mock-model\",\"providerID\":\"mock\",\"time\":{\"created\":1791283675311,\"completed\":1791283675463},\"finish\":\"stop\"}"
+   },
+   {
+    "id": "msg_110d3c19d001TJYDFzArNPNJMs",
+    "session_id": "ses_eef2c4681ffeSXu6sP334VyguH",
+    "time_created": 1791283675549,
+    "time_updated": 1791283675723,
+    "data": "{\"parentID\":\"msg_110d3ba140011eCc2E9Y3DAXHe\",\"role\":\"assistant\",\"mode\":\"build\",\"agent\":\"build\",\"path\":{\"cwd\":\"/work/proj\",\"root\":\"/work/proj\"},\"cost\":0.003279,\"tokens\":{\"total\":1073,\"input\":823,\"output\":40,\"reasoning\":10,\"cache\":{\"write\":0,\"read\":200}},\"modelID\":\"mock-model\",\"providerID\":\"mock\",\"time\":{\"created\":1791283675549,\"completed\":1791283675722},\"finish\":\"stop\"}"
+   },
+   {
+    "id": "msg_110d3cc4b0012FZiDIRTx84sZp",
+    "session_id": "ses_eef2c371dffesMpHdkR6YuQ3PJ",
+    "time_created": 1791283678283,
+    "time_updated": 1791283678297,
+    "data": "{\"role\":\"user\",\"time\":{\"created\":1791283678283},\"agent\":\"build\",\"model\":{\"providerID\":\"mock\",\"modelID\":\"mock-model\"}}"
+   },
+   {
+    "id": "msg_110d3cc75001GVmaVcnZPD6VDK",
+    "session_id": "ses_eef2c371dffesMpHdkR6YuQ3PJ",
+    "time_created": 1791283678325,
+    "time_updated": 1791283679337,
+    "data": "{\"role\":\"assistant\",\"parentID\":\"msg_110d3cc4b0012FZiDIRTx84sZp\",\"mode\":\"general\",\"agent\":\"general\",\"path\":{\"cwd\":\"/work/proj\",\"root\":\"/work/proj\"},\"cost\":0,\"tokens\":{\"input\":0,\"output\":0,\"reasoning\":0,\"cache\":{\"read\":0,\"write\":0}},\"modelID\":\"mock-model\",\"providerID\":\"mock\",\"time\":{\"created\":1791283678325,\"completed\":1791283679337},\"finish\":\"tool-calls\"}"
+   },
+   {
+    "id": "msg_110d3cca30016okLDH2kbsxfQR",
+    "session_id": "ses_eef2c3380ffexKCjymGO2kzLET",
+    "time_created": 1791283678372,
+    "time_updated": 1791283679383,
+    "data": "{\"role\":\"user\",\"time\":{\"created\":1791283678372},\"agent\":\"general\",\"model\":{\"providerID\":\"mock\",\"modelID\":\"mock-model\"},\"summary\":{\"diffs\":[]}}"
+   },
+   {
+    "id": "msg_110d3ccde0017FRmou3hT8LI5h",
+    "session_id": "ses_eef2c3380ffexKCjymGO2kzLET",
+    "time_created": 1791283678430,
+    "time_updated": 1791283679329,
+    "data": "{\"parentID\":\"msg_110d3cca30016okLDH2kbsxfQR\",\"role\":\"assistant\",\"mode\":\"general\",\"agent\":\"general\",\"path\":{\"cwd\":\"/work/proj\",\"root\":\"/work/proj\"},\"cost\":0.003285,\"tokens\":{\"total\":1075,\"input\":825,\"output\":40,\"reasoning\":10,\"cache\":{\"write\":0,\"read\":200}},\"modelID\":\"mock-model\",\"providerID\":\"mock\",\"time\":{\"created\":1791283678430,\"completed\":1791283679328},\"finish\":\"stop\"}"
+   },
+   {
+    "id": "msg_110d3d06d001RtDyo5QashiqHu",
+    "session_id": "ses_eef2c371dffesMpHdkR6YuQ3PJ",
+    "time_created": 1791283679341,
+    "time_updated": 1791283679342,
+    "data": "{\"role\":\"user\",\"time\":{\"created\":1791283679341},\"agent\":\"build\",\"model\":{\"providerID\":\"mock\",\"modelID\":\"mock-model\"}}"
+   },
+   {
+    "id": "msg_110d3d073001Y7k75YhYJRrXlo",
+    "session_id": "ses_eef2c371dffesMpHdkR6YuQ3PJ",
+    "time_created": 1791283679347,
+    "time_updated": 1791283679510,
+    "data": "{\"parentID\":\"msg_110d3d06d001RtDyo5QashiqHu\",\"role\":\"assistant\",\"mode\":\"build\",\"agent\":\"build\",\"path\":{\"cwd\":\"/work/proj\",\"root\":\"/work/proj\"},\"cost\":0.003288,\"tokens\":{\"total\":1076,\"input\":826,\"output\":40,\"reasoning\":10,\"cache\":{\"write\":0,\"read\":200}},\"modelID\":\"mock-model\",\"providerID\":\"mock\",\"time\":{\"created\":1791283679347,\"completed\":1791283679509},\"finish\":\"stop\"}"
+   },
+   {
+    "id": "msg_110d3dacd0010TkCN1kILYHPxT",
+    "session_id": "ses_eef2c286bffeHNGmz4fOlOrCrp",
+    "time_created": 1791283681997,
+    "time_updated": 1791283682185,
+    "data": "{\"role\":\"user\",\"time\":{\"created\":1791283681997},\"agent\":\"build\",\"model\":{\"providerID\":\"mock\",\"modelID\":\"mock-model\"},\"summary\":{\"diffs\":[]}}"
+   },
+   {
+    "id": "msg_110d3daee001C5sBhojRVZbViL",
+    "session_id": "ses_eef2c286bffeHNGmz4fOlOrCrp",
+    "time_created": 1791283682030,
+    "time_updated": 1791283682999,
+    "data": "{\"parentID\":\"msg_110d3dacd0010TkCN1kILYHPxT\",\"role\":\"assistant\",\"mode\":\"build\",\"agent\":\"build\",\"path\":{\"cwd\":\"/work/proj\",\"root\":\"/work/proj\"},\"cost\":0.003294,\"tokens\":{\"total\":1078,\"input\":828,\"output\":40,\"reasoning\":10,\"cache\":{\"write\":0,\"read\":200}},\"modelID\":\"mock-model\",\"providerID\":\"mock\",\"time\":{\"created\":1791283682030,\"completed\":1791283682998},\"finish\":\"stop\"}"
+   }
+  ],
+  "part": [
+   {
+    "id": "prt_110d3a876001DpJN9Wjz0bZF9C",
+    "message_id": "msg_110d3a866001XWO2dQRsDEuEtX",
+    "session_id": "ses_eef2c5810ffeDlifxbZjhzyRoM",
+    "time_created": 1791283670589,
+    "time_updated": 1791283670592,
+    "data": "{\"type\":\"text\",\"text\":\"\\\"plain hello\\\"\"}"
+   },
+   {
+    "id": "prt_110d3b285001qNK2aCPqk8Mlbi",
+    "message_id": "msg_110d3ae52001ph600ssQix7Tqv",
+    "session_id": "ses_eef2c5810ffeDlifxbZjhzyRoM",
+    "time_created": 1791283671685,
+    "time_updated": 1791283671687,
+    "data": "{\"snapshot\":\"93432447bdf3d612fd38156d92811f2af0335ad7\",\"type\":\"step-start\"}"
+   },
+   {
+    "id": "prt_110d3b288001jIk33T6IQRBLHJ",
+    "message_id": "msg_110d3ae52001ph600ssQix7Tqv",
+    "session_id": "ses_eef2c5810ffeDlifxbZjhzyRoM",
+    "time_created": 1791283671689,
+    "time_updated": 1791283671694,
+    "data": "{\"type\":\"text\",\"text\":\"Mock reply 19\",\"time\":{\"start\":1791283671689,\"end\":1791283671693}}"
+   },
+   {
+    "id": "prt_110d3b2bd0019sYkFduFUiBCzX",
+    "message_id": "msg_110d3ae52001ph600ssQix7Tqv",
+    "session_id": "ses_eef2c5810ffeDlifxbZjhzyRoM",
+    "time_created": 1791283671741,
+    "time_updated": 1791283671743,
+    "data": "{\"reason\":\"stop\",\"snapshot\":\"93432447bdf3d612fd38156d92811f2af0335ad7\",\"type\":\"step-finish\",\"tokens\":{\"total\":1069,\"input\":819,\"output\":40,\"reasoning\":10,\"cache\":{\"write\":0,\"read\":200}},\"cost\":0.003267}"
+   },
+   {
+    "id": "prt_110d3ba21001ksDLjNHMrBB0Wc",
+    "message_id": "msg_110d3ba140011eCc2E9Y3DAXHe",
+    "session_id": "ses_eef2c4681ffeSXu6sP334VyguH",
+    "time_created": 1791283674377,
+    "time_updated": 1791283674380,
+    "data": "{\"type\":\"text\",\"text\":\"\\\"please SPAWN a subagent\\\"\"}"
+   },
+   {
+    "id": "prt_110d3c07a0018ge68Osd0UrHnL",
+    "message_id": "msg_110d3bd1f001yAwWXeaCckDy7P",
+    "session_id": "ses_eef2c4681ffeSXu6sP334VyguH",
+    "time_created": 1791283675258,
+    "time_updated": 1791283675260,
+    "data": "{\"snapshot\":\"93432447bdf3d612fd38156d92811f2af0335ad7\",\"type\":\"step-start\"}"
+   },
+   {
+    "id": "prt_110d3c07e001D2KAD0OOZSb3yc",
+    "message_id": "msg_110d3bd1f001yAwWXeaCckDy7P",
+    "session_id": "ses_eef2c4681ffeSXu6sP334VyguH",
+    "time_created": 1791283675263,
+    "time_updated": 1791283675475,
+    "data": "{\"type\":\"tool\",\"tool\":\"task\",\"callID\":\"call_21\",\"state\":{\"status\":\"completed\",\"input\":{\"description\":\"sub work\",\"prompt\":\"do sub work\",\"subagent_type\":\"general\"},\"output\":\"<task id=\\\"ses_eef2c3f76ffeoBq0073mUpgYde\\\" state=\\\"completed\\\">\\n<task_result>\\nMock reply 22\\n</task_result>\\n</task>\",\"metadata\":{\"parentSessionId\":\"ses_eef2c4681ffeSXu6sP334VyguH\",\"sessionId\":\"ses_eef2c3f76ffeoBq0073mUpgYde\",\"model\":{\"modelID\":\"mock-model\",\"providerID\":\"mock\"},\"truncated\":false},\"title\":\"sub work\",\"time\":{\"start\":1791283675278,\"end\":1791283675474}}}"
+   },
+   {
+    "id": "prt_110d3c098001Ra4v9kcaOGdV8N",
+    "message_id": "msg_110d3c094001WdieEGmDUlcFeB",
+    "session_id": "ses_eef2c3f76ffeoBq0073mUpgYde",
+    "time_created": 1791283675293,
+    "time_updated": 1791283675295,
+    "data": "{\"type\":\"text\",\"text\":\"do sub work\"}"
+   },
+   {
+    "id": "prt_110d3c0fb0018O3QK362lqFkzj",
+    "message_id": "msg_110d3c0af001oX7D1Eip6tfhIo",
+    "session_id": "ses_eef2c3f76ffeoBq0073mUpgYde",
+    "time_created": 1791283675387,
+    "time_updated": 1791283675388,
+    "data": "{\"snapshot\":\"93432447bdf3d612fd38156d92811f2af0335ad7\",\"type\":\"step-start\"}"
+   },
+   {
+    "id": "prt_110d3c0fe001r5UYS3mNLVh1Ot",
+    "message_id": "msg_110d3c0af001oX7D1Eip6tfhIo",
+    "session_id": "ses_eef2c3f76ffeoBq0073mUpgYde",
+    "time_created": 1791283675390,
+    "time_updated": 1791283675395,
+    "data": "{\"type\":\"text\",\"text\":\"Mock reply 22\",\"time\":{\"start\":1791283675390,\"end\":1791283675394}}"
+   },
+   {
+    "id": "prt_110d3c124001qR9FSuy3XEcbqe",
+    "message_id": "msg_110d3c0af001oX7D1Eip6tfhIo",
+    "session_id": "ses_eef2c3f76ffeoBq0073mUpgYde",
+    "time_created": 1791283675428,
+    "time_updated": 1791283675429,
+    "data": "{\"reason\":\"stop\",\"snapshot\":\"93432447bdf3d612fd38156d92811f2af0335ad7\",\"type\":\"step-finish\",\"tokens\":{\"total\":1072,\"input\":822,\"output\":40,\"reasoning\":10,\"cache\":{\"write\":0,\"read\":200}},\"cost\":0.003276}"
+   },
+   {
+    "id": "prt_110d3c179001O0koV0eP56gxDB",
+    "message_id": "msg_110d3bd1f001yAwWXeaCckDy7P",
+    "session_id": "ses_eef2c4681ffeSXu6sP334VyguH",
+    "time_created": 1791283675513,
+    "time_updated": 1791283675515,
+    "data": "{\"reason\":\"tool-calls\",\"snapshot\":\"93432447bdf3d612fd38156d92811f2af0335ad7\",\"type\":\"step-finish\",\"tokens\":{\"total\":1071,\"input\":821,\"output\":40,\"reasoning\":10,\"cache\":{\"write\":0,\"read\":200}},\"cost\":0.003273}"
+   },
+   {
+    "id": "prt_110d3c1f0001gZl05wk7bLC4bA",
+    "message_id": "msg_110d3c19d001TJYDFzArNPNJMs",
+    "session_id": "ses_eef2c4681ffeSXu6sP334VyguH",
+    "time_created": 1791283675632,
+    "time_updated": 1791283675633,
+    "data": "{\"snapshot\":\"93432447bdf3d612fd38156d92811f2af0335ad7\",\"type\":\"step-start\"}"
+   },
+   {
+    "id": "prt_110d3c1f2001wEXv36Rd1J0Yln",
+    "message_id": "msg_110d3c19d001TJYDFzArNPNJMs",
+    "session_id": "ses_eef2c4681ffeSXu6sP334VyguH",
+    "time_created": 1791283675635,
+    "time_updated": 1791283675639,
+    "data": "{\"type\":\"text\",\"text\":\"Mock reply 23\",\"time\":{\"start\":1791283675635,\"end\":1791283675638}}"
+   },
+   {
+    "id": "prt_110d3c227001KXmn3vuy2GELkk",
+    "message_id": "msg_110d3c19d001TJYDFzArNPNJMs",
+    "session_id": "ses_eef2c4681ffeSXu6sP334VyguH",
+    "time_created": 1791283675687,
+    "time_updated": 1791283675688,
+    "data": "{\"reason\":\"stop\",\"snapshot\":\"93432447bdf3d612fd38156d92811f2af0335ad7\",\"type\":\"step-finish\",\"tokens\":{\"total\":1073,\"input\":823,\"output\":40,\"reasoning\":10,\"cache\":{\"write\":0,\"read\":200}},\"cost\":0.003279}"
+   },
+   {
+    "id": "prt_110d3cc56001VKyoh7LjzErRNl",
+    "message_id": "msg_110d3cc4b0012FZiDIRTx84sZp",
+    "session_id": "ses_eef2c371dffesMpHdkR6YuQ3PJ",
+    "time_created": 1791283678299,
+    "time_updated": 1791283678301,
+    "data": "{\"type\":\"subtask\",\"agent\":\"general\",\"description\":\"Run in a child session\",\"command\":\"sub\",\"model\":{\"providerID\":\"mock\",\"modelID\":\"mock-model\"},\"prompt\":\"Child command body argA\"}"
+   },
+   {
+    "id": "prt_110d3cc77001zJg5p20S45o36s",
+    "message_id": "msg_110d3cc75001GVmaVcnZPD6VDK",
+    "session_id": "ses_eef2c371dffesMpHdkR6YuQ3PJ",
+    "time_created": 1791283678328,
+    "time_updated": 1791283679340,
+    "data": "{\"type\":\"tool\",\"callID\":\"01M48D7K3RB6HNBK2FRECBH743\",\"tool\":\"task\",\"state\":{\"status\":\"completed\",\"input\":{\"prompt\":\"Child command body argA\",\"description\":\"Run in a child session\",\"subagent_type\":\"general\",\"command\":\"sub\"},\"title\":\"Run in a child session\",\"metadata\":{\"parentSessionId\":\"ses_eef2c371dffesMpHdkR6YuQ3PJ\",\"sessionId\":\"ses_eef2c3380ffexKCjymGO2kzLET\",\"model\":{\"modelID\":\"mock-model\",\"providerID\":\"mock\"},\"truncated\":false},\"output\":\"<task id=\\\"ses_eef2c3380ffexKCjymGO2kzLET\\\" state=\\\"completed\\\">\\n<task_result>\\nMock reply 25\\n</task_result>\\n</task>\",\"time\":{\"start\":1791283678328,\"end\":1791283679338}}}"
+   },
+   {
+    "id": "prt_110d3cca9001Gq7r7tCs3cpABR",
+    "message_id": "msg_110d3cca30016okLDH2kbsxfQR",
+    "session_id": "ses_eef2c3380ffexKCjymGO2kzLET",
+    "time_created": 1791283678381,
+    "time_updated": 1791283678383,
+    "data": "{\"type\":\"text\",\"text\":\"Child command body argA\"}"
+   },
+   {
+    "id": "prt_110d3d011001w5tMmDu83fWN7c",
+    "message_id": "msg_110d3ccde0017FRmou3hT8LI5h",
+    "session_id": "ses_eef2c3380ffexKCjymGO2kzLET",
+    "time_created": 1791283679249,
+    "time_updated": 1791283679251,
+    "data": "{\"snapshot\":\"93432447bdf3d612fd38156d92811f2af0335ad7\",\"type\":\"step-start\"}"
+   },
+   {
+    "id": "prt_110d3d0150013byLjpRgK8g70Q",
+    "message_id": "msg_110d3ccde0017FRmou3hT8LI5h",
+    "session_id": "ses_eef2c3380ffexKCjymGO2kzLET",
+    "time_created": 1791283679253,
+    "time_updated": 1791283679261,
+    "data": "{\"type\":\"text\",\"text\":\"Mock reply 25\",\"time\":{\"start\":1791283679253,\"end\":1791283679259}}"
+   },
+   {
+    "id": "prt_110d3d03c001fQb90dH6kzRQLq",
+    "message_id": "msg_110d3ccde0017FRmou3hT8LI5h",
+    "session_id": "ses_eef2c3380ffexKCjymGO2kzLET",
+    "time_created": 1791283679292,
+    "time_updated": 1791283679293,
+    "data": "{\"reason\":\"stop\",\"snapshot\":\"93432447bdf3d612fd38156d92811f2af0335ad7\",\"type\":\"step-finish\",\"tokens\":{\"total\":1075,\"input\":825,\"output\":40,\"reasoning\":10,\"cache\":{\"write\":0,\"read\":200}},\"cost\":0.003285}"
+   },
+   {
+    "id": "prt_110d3d06f001pq1R4lL8ARKvr5",
+    "message_id": "msg_110d3d06d001RtDyo5QashiqHu",
+    "session_id": "ses_eef2c371dffesMpHdkR6YuQ3PJ",
+    "time_created": 1791283679343,
+    "time_updated": 1791283679344,
+    "data": "{\"type\":\"text\",\"text\":\"Summarize the task tool output above and continue with your task.\",\"synthetic\":true}"
+   },
+   {
+    "id": "prt_110d3d0ce0017cMAc1vqKy3caO",
+    "message_id": "msg_110d3d073001Y7k75YhYJRrXlo",
+    "session_id": "ses_eef2c371dffesMpHdkR6YuQ3PJ",
+    "time_created": 1791283679439,
+    "time_updated": 1791283679440,
+    "data": "{\"snapshot\":\"93432447bdf3d612fd38156d92811f2af0335ad7\",\"type\":\"step-start\"}"
+   },
+   {
+    "id": "prt_110d3d0d1001Y7kJ9gXa4QZ3Gg",
+    "message_id": "msg_110d3d073001Y7k75YhYJRrXlo",
+    "session_id": "ses_eef2c371dffesMpHdkR6YuQ3PJ",
+    "time_created": 1791283679442,
+    "time_updated": 1791283679446,
+    "data": "{\"type\":\"text\",\"text\":\"Mock reply 26\",\"time\":{\"start\":1791283679441,\"end\":1791283679445}}"
+   },
+   {
+    "id": "prt_110d3d0f700114c5QWkFr6k57A",
+    "message_id": "msg_110d3d073001Y7k75YhYJRrXlo",
+    "session_id": "ses_eef2c371dffesMpHdkR6YuQ3PJ",
+    "time_created": 1791283679479,
+    "time_updated": 1791283679480,
+    "data": "{\"reason\":\"stop\",\"snapshot\":\"93432447bdf3d612fd38156d92811f2af0335ad7\",\"type\":\"step-finish\",\"tokens\":{\"total\":1076,\"input\":826,\"output\":40,\"reasoning\":10,\"cache\":{\"write\":0,\"read\":200}},\"cost\":0.003288}"
+   },
+   {
+    "id": "prt_110d3dad7001EI1CuQPo6q6hsS",
+    "message_id": "msg_110d3dacd0010TkCN1kILYHPxT",
+    "session_id": "ses_eef2c286bffeHNGmz4fOlOrCrp",
+    "time_created": 1791283682013,
+    "time_updated": 1791283682015,
+    "data": "{\"type\":\"text\",\"text\":\"Inline command body argB\"}"
+   },
+   {
+    "id": "prt_110d3de62001Y2JdOXCYGmCJ3I",
+    "message_id": "msg_110d3daee001C5sBhojRVZbViL",
+    "session_id": "ses_eef2c286bffeHNGmz4fOlOrCrp",
+    "time_created": 1791283682914,
+    "time_updated": 1791283682916,
+    "data": "{\"snapshot\":\"93432447bdf3d612fd38156d92811f2af0335ad7\",\"type\":\"step-start\"}"
+   },
+   {
+    "id": "prt_110d3de66001EFZ2jwv7msyVcV",
+    "message_id": "msg_110d3daee001C5sBhojRVZbViL",
+    "session_id": "ses_eef2c286bffeHNGmz4fOlOrCrp",
+    "time_created": 1791283682918,
+    "time_updated": 1791283682923,
+    "data": "{\"type\":\"text\",\"text\":\"Mock reply 28\",\"time\":{\"start\":1791283682918,\"end\":1791283682922}}"
+   },
+   {
+    "id": "prt_110d3de8f001HuFMG72oUBeJ22",
+    "message_id": "msg_110d3daee001C5sBhojRVZbViL",
+    "session_id": "ses_eef2c286bffeHNGmz4fOlOrCrp",
+    "time_created": 1791283682959,
+    "time_updated": 1791283682961,
+    "data": "{\"reason\":\"stop\",\"snapshot\":\"93432447bdf3d612fd38156d92811f2af0335ad7\",\"type\":\"step-finish\",\"tokens\":{\"total\":1078,\"input\":828,\"output\":40,\"reasoning\":10,\"cache\":{\"write\":0,\"read\":200}},\"cost\":0.003294}"
+   }
+  ]
+ }
+}

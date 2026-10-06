@@ -1,0 +1,11 @@
+{
+  "name": "opencode-token-monitor",
+  "version": "<exact-release-version>",
+  "source": "https://github.com/codeStruggle/opencode-token-monitor",
+  "artifact": "profile/plugins/opencode-token-monitor.js",
+  "sha256": "<actual-artifact-sha256>",
+  "dbSchemaVersion": 1,
+  "testedWith": {
+    "opencode": ["<actually-tested-version>"]
+  }
+}

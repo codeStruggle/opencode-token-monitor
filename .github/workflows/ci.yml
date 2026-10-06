@@ -1,0 +1,83 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: bun install --frozen-lockfile
+      - run: bun run typecheck
+      - run: bun run test
+        env:
+          PWSH: pwsh
+      - run: bun run build
+      - run: node --test tests/node/cli.test.mjs
+      - name: Standalone binary smoke test (host platform, no Bun on PATH)
+        shell: bash
+        run: |
+          target=$([ "$RUNNER_OS" = "macOS" ] && echo "tokenmon-macos-$([ "$(uname -m)" = arm64 ] && echo arm64 || echo x64)" || echo tokenmon-linux-x64)
+          bun run scripts/build.ts --binaries --targets=$target
+          env -i HOME="$RUNNER_TEMP" PATH=/usr/bin:/bin "dist/bin/$target" --version
+          env -i HOME="$RUNNER_TEMP" PATH=/usr/bin:/bin "dist/bin/$target" doctor --db "$RUNNER_TEMP/none.sqlite"
+
+  e2e:
+    # Real OpenCode with an isolated HOME and a local mock provider.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: bun install --frozen-lockfile
+      - run: npm install -g opencode-ai@1.18.34
+      - run: bun run build
+      - run: OPENCODE_BIN=opencode bun tests/e2e/run-e2e.ts
+
+  windows:
+    # Not yet verified on Windows; runs to collect evidence without blocking.
+    runs-on: windows-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.2
+      - run: bun install --frozen-lockfile
+      - run: bun run typecheck
+      - run: bun test tests/unit
+      - run: bun run build
+      - name: Standalone binary smoke test
+        run: |
+          bun run scripts/build.ts --binaries --targets=tokenmon-windows-x64.exe
+          dist/bin/tokenmon-windows-x64.exe --version
+      - name: install.ps1 / verify.ps1 / uninstall.ps1 (Windows PowerShell 5.1)
+        shell: powershell
+        run: |
+          $env:XDG_CONFIG_HOME = Join-Path $env:RUNNER_TEMP "cfg"
+          $env:XDG_DATA_HOME = Join-Path $env:RUNNER_TEMP "data"
+          $env:TOKENMON_BIN_DIR = Join-Path $env:RUNNER_TEMP "bin"
+          .\install.ps1 -WithCli; if ($LASTEXITCODE) { exit 1 }
+          .\verify.ps1; if ($LASTEXITCODE) { exit 1 }
+          .\uninstall.ps1; if ($LASTEXITCODE) { exit 1 }
+          if (Test-Path (Join-Path $env:XDG_CONFIG_HOME "opencode\plugins\opencode-token-monitor.js")) { exit 1 }
