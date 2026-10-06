@@ -15,11 +15,11 @@
 
 ## Blocked / open
 - Phase 9: no access to `codeStruggle/opencode-portable-profile`; kit ready in `integrations/portable-profile/`.
-- License not chosen (`UNLICENSED`); no release tag, no npm publish.
+- License: MIT (decided by the owner). No release tag, no npm publish yet.
 - Not executed: PowerShell scripts, macOS/Windows/arm64 binaries, real providers, real profile commands.
 
 ## Next steps
-1. Owner decides license and npm publishing; tag `v0.1.0` to run `.github/workflows/release.yml`.
+1. Owner decides npm publishing; tag `v0.1.0` to run `.github/workflows/release.yml`.
 2. Apply the integration kit to the profile repository and run its verify/install tests.
 3. Run `tests/e2e/run-e2e.ts` on macOS and Windows; extend `docs/COMPATIBILITY.md`.
 4. Observe at least one real provider (Anthropic/OpenAI) and confirm counter and cost semantics.

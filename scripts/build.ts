@@ -28,6 +28,7 @@ const banner = `// GENERATED FILE
 // Source: codeStruggle/opencode-token-monitor
 // Version: ${pkg.version}
 // DB schema: ${SUPPORTED_SCHEMA_VERSION}
+// License: MIT
 // DO NOT EDIT
 `
 

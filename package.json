@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "OpenCode plugin and CLI that records token usage and cost into a local SQLite database and analyzes it.",
   "type": "module",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/codeStruggle/opencode-token-monitor"

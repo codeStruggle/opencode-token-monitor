@@ -106,7 +106,12 @@ gespeichert — nur Zähler, Größen, IDs, Modellnamen und Pfade. Beim Teilen v
   nur das laufende Plugin sieht sie.
 - Bisher nur mit OpenCode 1.18.34 unter Linux und einem OpenAI-kompatiblen Anbieter getestet; andere
   Anbieter, macOS und Windows sind noch nicht verifiziert.
-- Lizenz: noch nicht festgelegt (`UNLICENSED`).
+
+## Lizenz
+
+[MIT](LICENSE). Das Plugin-Bundle und die npm-CLI enthalten nur Code dieses Projekts. Die eigenständigen
+Binärdateien betten zusätzlich die [Bun](https://bun.sh)-Laufzeit ein (MIT, JavaScriptCore/WebKit-Komponenten
+unter LGPL-2); Details siehe Buns Lizenz.
 
 ## Entwicklung
 

@@ -16,4 +16,5 @@ First implementation of plan A.
 - Database schema version 1.
 - Build of plugin bundle, npm CLI (Node ≥ 22.13) and standalone binaries; release workflow.
 - Portable-profile integration kit (update/verify scripts, manifest example).
+- Licensed under MIT.
 - Verified against OpenCode 1.18.34 on Linux x64 (see `docs/COMPATIBILITY.md`).

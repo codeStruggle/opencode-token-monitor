@@ -101,7 +101,12 @@ sizes, ids, model names and paths. Use `--redact-paths` when sharing output.
 - Inline commands cannot be recovered from OpenCode's database by `import`; only the live plugin sees them.
 - Tested only with OpenCode 1.18.34 on Linux and with an OpenAI-compatible provider; other providers,
   macOS and Windows are not yet verified.
-- License: not chosen yet (`UNLICENSED`).
+
+## License
+
+[MIT](LICENSE). The plugin bundle and the npm CLI contain only this project's code. The standalone
+binaries additionally embed the [Bun](https://bun.sh) runtime (MIT, with JavaScriptCore/WebKit
+components under LGPL-2); see Bun's license for details.
 
 ## Development
 

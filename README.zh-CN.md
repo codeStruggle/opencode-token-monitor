@@ -86,7 +86,10 @@ tokenmon doctor                        # 路径、schema、插件加载情况、
 - OpenCode 不记录会话标题生成的用量；Token Monitor 会报告这类请求的次数，但无法统计其 token。
 - `import` 无法从 OpenCode 数据库恢复非 subtask 的普通命令，只有实时运行的插件能看到它们。
 - 目前只在 Linux 上用 OpenCode 1.18.34 和一个 OpenAI 兼容 provider 测试过；其他 provider、macOS 和 Windows 尚未验证。
-- 许可证：尚未确定（`UNLICENSED`）。
+
+## 许可证
+
+[MIT](LICENSE)。插件 bundle 和 npm CLI 只包含本项目自己的代码。独立二进制额外内嵌了 [Bun](https://bun.sh) 运行时（MIT 许可，其中 JavaScriptCore/WebKit 组件为 LGPL-2），详见 Bun 的许可证。
 
 ## 开发
 

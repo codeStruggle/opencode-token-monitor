@@ -24,7 +24,7 @@ verification missing; **blocked** = cannot proceed from this environment; **open
 | 5 Context + cache | done | `tests/unit/context.test.ts` (real system prompt fully attributed), analytics tests (coverage, residual, over-estimate, cache `not_reported`) | estimates compared only against mock usage, not a real tokenizer |
 | 6 History/compare/Git | done | analytics tests (trend empty buckets, compare caveats, fingerprint grouping); plugin tests (git clean/dirty/non-git, fingerprint stability/salt/partial) | |
 | 7 Full CLI | done | `tests/integration/cli.test.ts` (JSON contract, CSV, every command, redaction, exit codes, data maintenance, install-plugin link semantics); `tests/node/cli.test.mjs` | |
-| 8a Minimal release | partial | `scripts/build.ts`; `.github/workflows/release.yml`; npm pack verified; npm-style plugin load verified from a packed tarball | no release tag pushed, npm not published, LICENSE not chosen |
+| 8a Minimal release | partial | `scripts/build.ts`; `.github/workflows/release.yml`; npm pack verified; npm-style plugin load verified from a packed tarball | no release tag pushed, npm not published |
 | 9 Profile integration | blocked | integration kit in `integrations/portable-profile/` with bash scripts tested (`tests/integration/profile-scripts.test.ts`) | profile repository not accessible from this session; PowerShell scripts not executed |
 | 8b Full release | partial | all five binaries cross-compile (sizes: linux 81 MB, macOS 62–69 MB, Windows 86 MB); linux-x64 runs without Bun | arm64/macOS/Windows binaries not executed; unsigned |
 | 10 Final E2E | partial | `tests/e2e/run-e2e.ts` against OpenCode 1.18.34: 20/20 checks (install, collection, duplicate load, abort, reconciliation, commands, traces, context, restart) | real providers, real profile commands, multiple models, Windows/macOS |
@@ -53,7 +53,8 @@ verification missing; **blocked** = cannot proceed from this environment; **open
 
 ## Decisions needed from the owner
 
-1. License (package.json is `UNLICENSED`; npm publish and redistribution in the profile need a license).
+1. ~~License~~ — decided 2026-10-06: MIT (`LICENSE`, `package.json`, bundle header `// License: MIT`).
+   Bundles contain no third-party code; standalone binaries embed the Bun runtime (MIT/LGPL-2 parts).
 2. Whether to publish to npm, and under which account.
 3. Access to `codeStruggle/opencode-portable-profile` to apply Phase 9.
 4. Code signing for macOS/Windows binaries (optional).
