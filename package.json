@@ -1,0 +1,44 @@
+{
+  "name": "opencode-token-monitor",
+  "version": "0.1.0",
+  "description": "OpenCode plugin and CLI that records token usage and cost into a local SQLite database and analyzes it.",
+  "type": "module",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/codeStruggle/opencode-token-monitor"
+  },
+  "main": "./dist/opencode-token-monitor.js",
+  "exports": {
+    ".": "./dist/opencode-token-monitor.js"
+  },
+  "bin": {
+    "tokenmon": "./dist/cli/tokenmon.js"
+  },
+  "files": [
+    "dist/opencode-token-monitor.js",
+    "dist/cli/tokenmon.js",
+    "README.md",
+    "README.zh-CN.md",
+    "README.de.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "bun test tests/unit tests/integration",
+    "test:node": "bun run build && node --test tests/node/cli.test.mjs",
+    "build": "bun run scripts/build.ts",
+    "build:binaries": "bun run scripts/build.ts --binaries",
+    "check": "bun run typecheck && bun run test && bun run build",
+    "test:e2e": "bun run build && bun tests/e2e/run-e2e.ts"
+  },
+  "devDependencies": {
+    "@opencode-ai/plugin": "1.18.34",
+    "@types/bun": "1.4.2",
+    "@types/node": "^22.13.0",
+    "typescript": "^5.6.0"
+  }
+}
